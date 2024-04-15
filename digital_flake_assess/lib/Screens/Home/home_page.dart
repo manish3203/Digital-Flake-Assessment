@@ -1,3 +1,4 @@
+import 'package:digital_flake_assess/Screens/Home/booking_history.dart';
 import 'package:digital_flake_assess/Screens/Home/booking_slot.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,6 +36,9 @@ class _HomePageState extends State {
                   ),
                   const Spacer(),
                   GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookingHistory()));
+                    },
                     child: Container(
                       alignment: Alignment.center,
                       height: 30,
@@ -101,6 +105,9 @@ class _HomePageState extends State {
                 Column(
                   children: [
                     GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookingSlot()));
+                      },
                       child: Container(
                         alignment: Alignment.center,
                         height: 147,

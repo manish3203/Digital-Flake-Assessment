@@ -64,7 +64,7 @@ class _HomePageState extends State {
                   children: [
                     GestureDetector(
                       onTap: (){
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const BookingSlot()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookingSlot()));
                       },
                       child: Container(
                         alignment: Alignment.center,

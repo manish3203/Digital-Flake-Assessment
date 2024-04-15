@@ -1,19 +1,18 @@
 
-import 'package:digital_flake_assess/Screens/Authentication/signup_page.dart';
+import 'package:digital_flake_assess/Screens/Authentication/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State createState() => _LoginPageState();
+  State createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State {
+class _SignUpPageState extends State {
 
-  //password visible or not
-  bool passwordVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,21 +20,17 @@ class _LoginPageState extends State {
         child: Padding(
           padding: const EdgeInsets.all(18.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 89),
-                child: Center(
-                  child: Image.asset(
-                    "assets/login_icon.png",scale:1.0
-                  ),
+                child: Text(
+                  "Create an Account",
+                  style:GoogleFonts.poppins(
+                    fontSize:24,
+                    fontWeight:FontWeight.w400,
+                  )
                 ),
-              ),
-              Text(
-                "Co-working",
-                style:GoogleFonts.poppins(
-                  fontSize:24,
-                  fontWeight:FontWeight.w400,
-                )
               ),
               const SizedBox(height: 60),
               Form(
@@ -44,7 +39,7 @@ class _LoginPageState extends State {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Mobile number or Email",
+                      "Full Name",
                       style: GoogleFonts.poppins(
                         fontSize:16,
                         fontWeight:FontWeight.w400,
@@ -68,6 +63,30 @@ class _LoginPageState extends State {
                     ),
                     const SizedBox(height: 20,),
                     Text(
+                      "Mobile number or Email",
+                      style: GoogleFonts.poppins(
+                        fontSize:16,
+                        fontWeight:FontWeight.w400,
+                        color:const Color.fromRGBO(73, 73, 73, 1)
+                      ),
+                    ),
+                    const SizedBox(height: 5,),
+                    Container(
+                      height: 56,
+                      decoration: BoxDecoration(
+                        border: Border.all(color:const Color.fromRGBO(218, 218, 218, 1),width: 1.3),
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          fillColor: const Color.fromRGBO(249, 249, 249, 1),
+                          filled: true,
+                          border: InputBorder.none,
+                        )
+                      ),
+                    ),
+                    const SizedBox(height: 20,),
+                    Text(
                       "Password",
                       style: GoogleFonts.poppins(
                         fontSize:16,
@@ -83,27 +102,17 @@ class _LoginPageState extends State {
                         borderRadius: BorderRadius.circular(10)
                       ),
                       child: TextFormField(
-                        obscureText: passwordVisible,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           fillColor: const Color.fromRGBO(249, 249, 249, 1),
                           filled: true,
                           border: InputBorder.none,
-                          suffixIcon: IconButton( 
-                            icon: (passwordVisible) ? const Icon(Icons.visibility_outlined,color: Color.fromRGBO(168, 168, 168, 1),)
-                              : const Icon(Icons.visibility_off_outlined,color: Color.fromRGBO(168, 168, 168, 1),),
-                            onPressed: (){
-                              setState(() {
-                                passwordVisible = !passwordVisible;
-                              });
-                            },
-                          )
-                        ),
+                        )
                       ),
                     ),
                   ],
                 )
               ),
-              const SizedBox(height: 140),
+              const SizedBox(height: 90),
               GestureDetector(
                 child: Container(
                   alignment: Alignment.center,
@@ -114,7 +123,7 @@ class _LoginPageState extends State {
                     borderRadius: BorderRadius.circular(10)
                   ),
                   child: Text(
-                    "Login",
+                    "Create an account",
                     style: GoogleFonts.poppins(
                       fontWeight:FontWeight.w700,
                       fontSize:16,
@@ -127,7 +136,7 @@ class _LoginPageState extends State {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "New user? ",
+                    "Existing user? ",
                     style: GoogleFonts.poppins(
                       color:const Color.fromRGBO(98, 98, 98, 1),
                       fontWeight:FontWeight.w400,
@@ -136,10 +145,10 @@ class _LoginPageState extends State {
                   ),
                   InkWell(
                     onTap: (){
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const SignUpPage()));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginPage()));
                     },
                     child: Text(
-                      "Create an account",
+                      "Log In",
                       style: GoogleFonts.poppins(
                         color:const Color.fromRGBO(42, 29, 139, 1),
                         fontWeight:FontWeight.w500,

@@ -1,5 +1,6 @@
 
 import 'package:digital_flake_assess/Screens/Authentication/signup_page.dart';
+import 'package:digital_flake_assess/Screens/Home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -105,6 +106,9 @@ class _LoginPageState extends State {
               ),
               const SizedBox(height: 140),
               GestureDetector(
+                onTap: (){
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomePage()));
+                },
                 child: Container(
                   alignment: Alignment.center,
                   height: 56,

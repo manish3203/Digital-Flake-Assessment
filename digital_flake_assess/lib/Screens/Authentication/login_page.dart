@@ -1,8 +1,11 @@
 
+import 'dart:convert';
+
 import 'package:digital_flake_assess/Screens/Authentication/signup_page.dart';
 import 'package:digital_flake_assess/Screens/Home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,8 +16,66 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State {
 
+   //Controller
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  //key
+  final GlobalKey _formKey = GlobalKey();
+
   //password visible or not
   bool passwordVisible = false;
+
+  // Future<void> _login() async {
+  //   final url = Uri.parse('https://demo0413095.mockable.io/digitalflake/api/login');
+  //   final response = await http.post(
+  //     url,
+  //     body: {
+  //       'email': _emailController.text.trim(),
+  //       'password': _passwordController.text.trim(),
+  //     },
+  //   );
+
+  //   if (response.statusCode == 200) {
+  //     final responseData = json.decode(response.body);
+  //     if (responseData['success'] == true) {
+  //       // Navigate to home page or perform any other actions upon successful login
+  //       print('Login successful');
+  //     } else {
+  //       // Show error message for incorrect email or password
+  //       showDialog(
+  //         context: context,
+  //         builder: (context) => AlertDialog(
+  //           title: Text('Login Failed'),
+  //           content: Text('Invalid email or password.'),
+  //           actions: <Widget>[
+  //             TextButton(
+  //               onPressed: () => Navigator.of(context).pop(),
+  //               child: Text('OK'),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     }
+  //   } else {
+  //     // Show error message for server error
+  //     showDialog(
+  //       context: context,
+  //       builder: (context) => AlertDialog(
+  //         title: Text('Error'),
+  //         content: Text('Failed to connect to the server. Please try again later.'),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             onPressed: () => Navigator.of(context).pop(),
+  //             child: Text('OK'),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   }
+  // }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +101,7 @@ class _LoginPageState extends State {
               ),
               const SizedBox(height: 60),
               Form(
+                key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -60,6 +122,8 @@ class _LoginPageState extends State {
                         borderRadius: BorderRadius.circular(10)
                       ),
                       child: TextFormField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(
                           fillColor: Color.fromRGBO(249, 249, 249, 1),
                           filled: true,
@@ -84,6 +148,8 @@ class _LoginPageState extends State {
                         borderRadius: BorderRadius.circular(10)
                       ),
                       child: TextFormField(
+                        controller: _passwordController,
+                        keyboardType: TextInputType.visiblePassword,
                         obscureText: passwordVisible,
                         decoration: InputDecoration(
                           fillColor: const Color.fromRGBO(249, 249, 249, 1),
@@ -107,7 +173,7 @@ class _LoginPageState extends State {
               const SizedBox(height: 140),
               GestureDetector(
                 onTap: (){
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomePage()));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context) => const HomePage())));
                 },
                 child: Container(
                   alignment: Alignment.center,

@@ -1,7 +1,10 @@
 
+import 'dart:convert';
+
 import 'package:digital_flake_assess/Screens/Authentication/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -12,7 +15,46 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State {
 
+  //Controller
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
+  //key
+  final GlobalKey _formKey = GlobalKey();
+
+  //function parse api and send data
+  Future<void> _createAccount() async{
+    
+    //Get email and pass from textfield
+    String email = _emailController.text;
+    String name = _nameController.text;
+    Map<String, dynamic> requestBody = {
+      'email' : email,
+      'name' : name
+    };
+
+    try {
+      // Make the HTTP POST request
+      http.Response response = await http.post(
+        Uri.parse('https://demo0413095.mockable.io/digitalflake/api/create_account'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(requestBody),
+      );
+
+      // Process the response
+      if (response.statusCode == 200) {
+        print('Account created successfully!');
+        // You can navigate to another screen or show a success message
+      } else {
+        print('Failed to create account. Status code: ${response.statusCode}');
+        // You can show an error message or handle the error in another way
+      }
+    } catch (error) {
+      print('Error: $error');
+      // Handle any errors that occur during the HTTP request
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +76,7 @@ class _SignUpPageState extends State {
               ),
               const SizedBox(height: 60),
               Form(
+                key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -54,6 +97,8 @@ class _SignUpPageState extends State {
                         borderRadius: BorderRadius.circular(10)
                       ),
                       child: TextFormField(
+                        controller:_nameController,
+                        keyboardType: TextInputType.name,
                         decoration: const InputDecoration(
                           fillColor: Color.fromRGBO(249, 249, 249, 1),
                           filled: true,
@@ -63,7 +108,7 @@ class _SignUpPageState extends State {
                     ),
                     const SizedBox(height: 20,),
                     Text(
-                      "Mobile number or Email",
+                      "Mobile number",
                       style: GoogleFonts.poppins(
                         fontSize:16,
                         fontWeight:FontWeight.w400,
@@ -78,8 +123,10 @@ class _SignUpPageState extends State {
                         borderRadius: BorderRadius.circular(10)
                       ),
                       child: TextFormField(
+                        controller: _phoneController,
+                        keyboardType: TextInputType.phone,
                         decoration: const InputDecoration(
-                          fillColor: const Color.fromRGBO(249, 249, 249, 1),
+                          fillColor:  Color.fromRGBO(249, 249, 249, 1),
                           filled: true,
                           border: InputBorder.none,
                         )
@@ -87,7 +134,7 @@ class _SignUpPageState extends State {
                     ),
                     const SizedBox(height: 20,),
                     Text(
-                      "Password",
+                      "Email ID",
                       style: GoogleFonts.poppins(
                         fontSize:16,
                         fontWeight:FontWeight.w400,
@@ -102,8 +149,10 @@ class _SignUpPageState extends State {
                         borderRadius: BorderRadius.circular(10)
                       ),
                       child: TextFormField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(
-                          fillColor: const Color.fromRGBO(249, 249, 249, 1),
+                          fillColor: Color.fromRGBO(249, 249, 249, 1),
                           filled: true,
                           border: InputBorder.none,
                         )
@@ -114,6 +163,7 @@ class _SignUpPageState extends State {
               ),
               const SizedBox(height: 90),
               GestureDetector(
+                onTap: _createAccount,
                 child: Container(
                   alignment: Alignment.center,
                   height: 56,

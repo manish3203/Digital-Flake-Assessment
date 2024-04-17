@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:digital_flake_assess/Screens/Home/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class SelectDesk extends StatefulWidget {
   const SelectDesk({super.key});
@@ -117,8 +121,43 @@ class _SelectDeskPage extends State {
       }
     );
   }
+
+  List<Map<String, dynamic>> availabilityData = [];
+
+  Future<void> fetchAvailability(DateTime selectedDate, int slotId) async {
+    final String apiUrl =
+        'https://demo0413095.mockable.io/digitalflake/api/get_availability?date=${selectedDate.year}-${selectedDate.month}-${selectedDate.day}&slot_id=$slotId&type=1';
+
+    final response = await http.get(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        availabilityData = List<Map<String, dynamic>>.from(data['availability']);
+      });
+    } else {
+      throw Exception('Failed to load availability data');
+    }
+  }
+
+  bool checkDesk(int workspaceId) {
+    final workspace = availabilityData.firstWhere(
+      (ws) => ws['workspace_id'] == workspaceId && ws['workspace_active'] == true,
+      orElse: () => {},
+    );
+    return workspace.isNotEmpty;
+    //return workspace != null ? Colors.red : const Color.fromRGBO(240, 245, 255, 1);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAvailability(DateTime.now(), 2); // Change slotId as needed
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(18.0),
@@ -154,33 +193,38 @@ class _SelectDeskPage extends State {
                 fontSize:13,
               ),
             ),
-            SizedBox(
-              height: 300,
-              child: GridView.count(
-                crossAxisCount: 6,
-                childAspectRatio: 1,
-                mainAxisSpacing: 7.0,
-                crossAxisSpacing: 8.0,
-                children: List.generate(40, (index) => GestureDetector(
-                  onTap: (){},
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: 42,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: const Color.fromRGBO(240, 245, 255, 1),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: const Color.fromRGBO(199, 207, 252, 1))
-                    ),
-                    child: Text(
-                      "${index+1}",
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight:FontWeight.w400
+            Expanded(
+              child: availabilityData.isEmpty ? const Center(child: CircularProgressIndicator()) : SizedBox(
+                height: 300,
+                child: GridView.count(
+                  crossAxisCount: 6,
+                  childAspectRatio: 1,
+                  mainAxisSpacing: 7.0,
+                  crossAxisSpacing: 8.0,
+                  children: List.generate(40, (index) { 
+                    final workspaceId = index + 1;
+                    return GestureDetector(
+                    onTap: (){},
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: checkDesk(workspaceId) ?const Color.fromRGBO(227, 227, 227, 1) :const Color.fromRGBO(240, 245, 255, 1),
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: const Color.fromRGBO(199, 207, 252, 1))
+                      ),
+                      child: Text(
+                        "${index+1}",
+                        style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          fontWeight:FontWeight.w400,
+                          color:checkDesk(workspaceId) ? Colors.white : Colors.black
+                        ),
                       ),
                     ),
-                  ),
-                )
+                );
+                }),
                 ),
               ),
             ),
